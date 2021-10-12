@@ -1,6 +1,5 @@
 package com.example.student.controllers;
 
-import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,27 +16,23 @@ import com.example.student.dto.input.student.CreateStudentDTO;
 import com.example.student.dto.input.student.UpdateStudentDTO;
 import com.example.student.model.Student;
 import com.example.student.service.StudentService;
+import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/students")
+@RequiredArgsConstructor
 public class StudentController {
 
 	@Autowired
-	private StudentService service;
-
-	@GetMapping()
-	public List<Student> index() {
-		return service.findAll();
-	}
+	private final StudentService service;
 
 	@GetMapping("/{id}")
-	public Student show(@PathVariable String id) {
-		Optional<Student> student = service.findOne(id);
+	public Student get(@PathVariable String id) {
+		Optional<Student> student = service.get(id);
 
 		if (student.isEmpty()) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Student not found.");
 		}
-
 		return student.get();
 	}
 
